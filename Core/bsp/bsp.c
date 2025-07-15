@@ -8,7 +8,7 @@
 #include "stm32g4xx_hal.h"
 #include <stdio.h>
 
-// Q_DEFINE_THIS_MODULE("bsp.c")
+Q_DEFINE_THIS_MODULE("bsp.c")
 
 /**************************************************************************************************\
 * Private macros
@@ -20,6 +20,8 @@
 /**************************************************************************************************\
 * Private type definitions
 \**************************************************************************************************/
+
+extern ADC_HandleTypeDef hadc2;
 
 /**************************************************************************************************\
 * Private prototypes
@@ -152,23 +154,44 @@ void BSP_LED_Off()
     HAL_GPIO_WritePin(FW_LED_GPIO_Port, FW_LED_Pin, 0);
 }
 //............................................................................
-void BSP_debug_gpio_on()
-{
-    debug_gpio_state = true;
-    HAL_GPIO_WritePin(DEBUG_GPIO_GPIO_Port, DEBUG_GPIO_Pin, debug_gpio_state);
-}
+// void BSP_debug_gpio_on()
+// {
+//     debug_gpio_state = true;
+//     HAL_GPIO_WritePin(DEBUG_GPIO_GPIO_Port, DEBUG_GPIO_Pin, debug_gpio_state);
+// }
+// //............................................................................
+// void BSP_debug_gpio_off()
+// {
+//     debug_gpio_state = false;
+//     HAL_GPIO_WritePin(DEBUG_GPIO_GPIO_Port, DEBUG_GPIO_Pin, debug_gpio_state);
+// }
+// //............................................................................
+// void BSP_debug_gpio_toggle()
+// {
+//     debug_gpio_state = !debug_gpio_state;
+//     HAL_GPIO_WritePin(DEBUG_GPIO_GPIO_Port, DEBUG_GPIO_Pin, debug_gpio_state);
+// }
 //............................................................................
-void BSP_debug_gpio_off()
+
+/**
+ ***************************************************************************************************
+ * @brief   Functions for temp sensor
+ **************************************************************************************************/
+
+void BSP_Temp_Pwr_ADC_Begin_Conversion(uint16_t *dma_buffer)
 {
-    debug_gpio_state = false;
-    HAL_GPIO_WritePin(DEBUG_GPIO_GPIO_Port, DEBUG_GPIO_Pin, debug_gpio_state);
+    HAL_StatusTypeDef retval;
+
+    retval = HAL_ADC_Stop_DMA(&hadc2);
+    Q_ASSERT(retval == HAL_OK);
+
+    // Restart the DMA since it is in normal mode, not circular
+    retval = HAL_ADC_Start_DMA(&hadc2, (uint32_t *) dma_buffer, 2);
+    // not sure why this is necessary, I didn't need it when I did the same thing on Purafy!
+    __HAL_ADC_ENABLE_IT(&hadc2, ADC_IT_EOS);
+    Q_ASSERT(retval == HAL_OK);
 }
-//............................................................................
-void BSP_debug_gpio_toggle()
-{
-    debug_gpio_state = !debug_gpio_state;
-    HAL_GPIO_WritePin(DEBUG_GPIO_GPIO_Port, DEBUG_GPIO_Pin, debug_gpio_state);
-}
+
 //............................................................................
 void BSP_terminate(int16_t result)
 {

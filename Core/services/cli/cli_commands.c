@@ -24,6 +24,7 @@ static void on_cli_toggle_led(EmbeddedCli *cli, char *args, void *context);
 static void on_print_reset_reason(EmbeddedCli *cli, char *args, void *context);
 static void on_do_q_assert(EmbeddedCli *cli, char *args, void *context);
 static void on_fault(EmbeddedCli *cli, char *args, void *context);
+static void on_cli_temperature(EmbeddedCli *cli, char *args, void *context);
 
 static CliCommandBinding cli_cmd_list[] = {
     (CliCommandBinding) {
@@ -50,13 +51,6 @@ static CliCommandBinding cli_cmd_list[] = {
         NULL,                          // optional pointer to any application context
         on_print_reset_reason          // binding function
     },
-    (CliCommandBinding) {
-        "assertNow",                                      // command name (spaces are not allowed)
-        "force a q_assert. Opt arg1: other reset reason", // Optional help for a command
-        true,                                             // flag whether to tokenize arguments
-        NULL,          // optional pointer to any application context
-        on_do_q_assert // binding function
-    },
 
     (CliCommandBinding) {
         "digital-out-set", // command name (spaces are not allowed)
@@ -74,6 +68,14 @@ static CliCommandBinding cli_cmd_list[] = {
         true,                  // flag whether to tokenize arguments
         NULL,                  // optional pointer to any application context
         on_cli_digital_in_read // binding function
+    },
+
+    (CliCommandBinding) {
+        "temperature",              // command name (spaces are not allowed)
+        "read the temperature ADC", // Optional help for a command
+        true,                       // flag whether to tokenize arguments
+        NULL,                       // optional pointer to any application context
+        on_cli_temperature          // binding function
     },
 
 };
@@ -100,22 +102,6 @@ static void on_print_reset_reason(EmbeddedCli *cli, char *args, void *context)
     char buffer[90];
     snprintf_reset_reason(buffer, 90, "\r\n");
     embeddedCliPrint(cli, buffer);
-}
-static void on_do_q_assert(EmbeddedCli *cli, char *args, void *context)
-{
-    Q_UNUSED_PAR(cli);
-    Q_UNUSED_PAR(context);
-    Reset_Reason_T reason = RESET_REASON_Q_ASSERT;
-    uint16_t argCount     = embeddedCliGetTokenCount(args);
-    if (argCount > 0)
-    {
-        const char *arg1 = embeddedCliGetToken(args, 1);
-        reason           = strtoul(arg1, NULL, 10);
-    }
-
-    DebugForceFaultEvent_T *e = Q_NEW(DebugForceFaultEvent_T, POSTED_FORCE_FAULT_SIG);
-    e->desiredFault           = reason;
-    QACTIVE_POST(AO_PC_COM, &e->super, NULL);
 }
 
 static void on_fault(EmbeddedCli *cli, char *args, void *context)
@@ -154,4 +140,11 @@ static void on_fault(EmbeddedCli *cli, char *args, void *context)
         snprintf(print_buffer, sizeof(print_buffer), "Message: %s\r\n", this_fault.msg);
         embeddedCliPrint(cli, print_buffer);
     }
+}
+
+static void on_cli_temperature(EmbeddedCli *cli, char *args, void *context)
+{
+    QActive_subscribe(AO_PC_COM, PUBSUB_WATER_TEMP_SIG);
+    static QEvt const event = QEVT_INITIALIZER(PUBSUB_SAMPLE_TEMP_PWR_SIG);
+    QACTIVE_PUBLISH(&event, NULL);
 }

@@ -390,6 +390,18 @@ static QState active(PC_COM *const me, QEvt const *const e)
             break;
         }
 
+        case PUBSUB_WATER_TEMP_SIG: {
+            QActive_unsubscribe(AO_PC_COM, PUBSUB_WATER_TEMP_SIG);
+
+            uint16_t temp_raw = Q_EVT_CAST(ADCEvent_T)->raw;
+
+            char print_buffer[PC_COM_EVENT_MAX_MSG_LENGTH] = {0};
+            snprintf(print_buffer, sizeof(print_buffer), "Water temp ADC raw = %d", temp_raw);
+            PC_COM_print(print_buffer);
+            status = Q_HANDLED();
+            break;
+        }
+
         case TEST_SIG: {
             PC_COM_print("Hello World!");
             status = Q_HANDLED();

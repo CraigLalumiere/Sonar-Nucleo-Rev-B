@@ -22,8 +22,8 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("workspaces/nucleo-g474-template", "$(ProjectDir)");
-  Project.AddPathSubstitute ("workspaces/nucleo-g474-template", "$(ProjectDir)");
+  Project.AddPathSubstitute ("workspaces/Sonar-Nucleo-Rev-B", "$(ProjectDir)");
+  Project.AddPathSubstitute ("workspaces/Sonar-Nucleo-Rev-B", "$(ProjectDir)");
   Project.SetDevice ("STM32G474RE");
   Project.SetHostIF ("USB", "");
   Project.SetTargetIF ("SWD");

@@ -91,6 +91,7 @@ set(sources_SRCS
 
     # application
     ${PROJ_PATH}/Core/Src/main.c
+    ${PROJ_PATH}/Core/Src/interrupts.c
 
     # services
     ${PROJ_PATH}/Core/services/cli/cli_commands.c
@@ -98,6 +99,7 @@ set(sources_SRCS
     # ${PROJ_PATH}/Core/services/cli/cli.c
     ${PROJ_PATH}/Core/services/fault_manager.c
     ${PROJ_PATH}/Core/services/blinky.c  
+    ${PROJ_PATH}/Core/services/director.c  
     ${PROJ_PATH}/Core/services/reset.c
     ${PROJ_PATH}/Core/services/reset_reason_print.c    
     ${PROJ_PATH}/Core/services/pc_com/hdlc.c
@@ -145,6 +147,7 @@ set(sources_SRCS
     ${DRIVERS_PATH}/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac.c
     ${DRIVERS_PATH}/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dac_ex.c
     ${DRIVERS_PATH}/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart_ex.c
+    ${DRIVERS_PATH}/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_opamp.c
     
 
 

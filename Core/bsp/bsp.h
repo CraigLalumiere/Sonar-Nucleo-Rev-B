@@ -12,6 +12,9 @@
 #define BSP_TICKS_PER_SEC         1000U
 #define MILLISECONDS_TO_TICKS(ms) ((ms) * ((BSP_TICKS_PER_SEC) / 1000))
 
+#define AVREF          3.275
+#define ADC_RESOLUTION 4096
+
 /**************************************************************************************************\
 * Public type definitions
 \**************************************************************************************************/
@@ -39,9 +42,16 @@ uint32_t BSP_Get_Milliseconds_Tick(void);
  **************************************************************************************************/
 void BSP_LED_On(void);
 void BSP_LED_Off(void);
-void BSP_debug_gpio_on(void);
-void BSP_debug_gpio_off(void);
-void BSP_debug_gpio_toggle(void);
+// void BSP_debug_gpio_on(void);
+// void BSP_debug_gpio_off(void);
+// void BSP_debug_gpio_toggle(void);
+
+/**
+ ***************************************************************************************************
+ * @brief   Functions for temp sensor
+ **************************************************************************************************/
+
+void BSP_Temp_Pwr_ADC_Begin_Conversion(uint16_t *dma_buffer);
 
 /**
  ***************************************************************************************************
