@@ -79,8 +79,6 @@ void Error_Handler(void);
 #define CS_GPIO_Port GPIOA
 #define nHV_DISCHARGE_Pin GPIO_PIN_11
 #define nHV_DISCHARGE_GPIO_Port GPIOA
-#define DEBUG_GPIO_Pin GPIO_PIN_6
-#define DEBUG_GPIO_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

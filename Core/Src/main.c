@@ -603,7 +603,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, FW_LED_Pin|CS_Pin|nHV_DISCHARGE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, BOOST_EN_Pin|DEBUG_GPIO_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(BOOST_EN_GPIO_Port, BOOST_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : GAIN_SEL_0_Pin GAIN_SEL_1_Pin */
   GPIO_InitStruct.Pin = GAIN_SEL_0_Pin|GAIN_SEL_1_Pin;
@@ -625,12 +625,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : BOOST_EN_Pin DEBUG_GPIO_Pin */
-  GPIO_InitStruct.Pin = BOOST_EN_Pin|DEBUG_GPIO_Pin;
+  /*Configure GPIO pin : BOOST_EN_Pin */
+  GPIO_InitStruct.Pin = BOOST_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(BOOST_EN_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
   /* USER CODE END MX_GPIO_Init_2 */
