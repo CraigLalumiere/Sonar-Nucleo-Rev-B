@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+enum MessageType {
+    // Log Print
+    LOG_PRINT = 1;
+
+    // CLI Data
+    CLI_DATA = 2;    
+
+    // Add datapoint to some plot
+    LOG_TO_PLOT = 3;
+
+    // Add datapoint to some plot
+    ADD_XY_TO_PLOT = 4;
+
+    // Add datapoint to a bode plot
+    ADD_TO_BODE_PLOT = 5;
+
+    // Send a bunch of data to draw an entire plot
+    DRAW_PLOT = 6;
+
+    // Send a bunch of data to draw an entire bode (mag/phase) plot on log/log scale
+    DRAW_BODE_PLOT = 7;
+
+    // Wipe all plot data
+    CLEAR_PLOTS = 8;
+
+    // Set a plot's title and X/Y axis labels
+    CONFIG_PLOT = 9;
+}
